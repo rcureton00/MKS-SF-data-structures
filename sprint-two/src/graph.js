@@ -86,7 +86,6 @@ Graph.prototype.forEachNode = function(cb){
   // iterate through nodes and apply cb function
   // no return
   for (var i = 0; i < this.storage.length; i++) {
-    console.log(this.storage[i].value);
     cb(this.storage[i].value)
   }
 };
