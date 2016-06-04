@@ -7,6 +7,7 @@ var Graph = function(){
 
 Graph.prototype.addNode = function(node){
   var current = {};
+  current.edges = [];
   current.value = node;
   this.storage.push(current);
 };
@@ -35,11 +36,10 @@ Graph.prototype.hasEdge = function(fromNode, toNode){
     if(this.storage[i].value === fromNode) {
       for (var j = 0; j < this.storage.length; j++) {
         if(this.storage[j].value === toNode) {
-          if(this.storage[i].edge === this.storage[j].value &&
-          this.storage[j].edge === this.storage[i].value) {
+          if(_.contains(this.storage[i].edges, this.storage[j].value) &&
+          _.contains(this.storage[j].edges, this.storage[i].value)) {
             found = true;
           }
-
         }
       }
     }
@@ -53,9 +53,10 @@ Graph.prototype.addEdge = function(fromNode, toNode){
       for (var j = 0; j < this.storage.length; j++) {
         if(this.storage[j].value === toNode) {
           //add Edge
-          this.storage[i].edge = this.storage[j].value;
-          this.storage[j].edge = this.storage[i].value;
-
+          
+          this.storage[i].edges.push(this.storage[j].value);
+          this.storage[j].edges.push(this.storage[i].value);
+          
         }
       }
     }
@@ -64,11 +65,30 @@ Graph.prototype.addEdge = function(fromNode, toNode){
 };
 
 Graph.prototype.removeEdge = function(fromNode, toNode){
-
+  // declare two variables to hold nodes if found
+  // no return
+    for (var i = 0; i < this.storage.length; i++) {
+      if(this.storage[i].value === fromNode) {
+        for (var j = 0; j < this.storage.length; j++) {
+          if(this.storage[j].value === toNode) {
+  
+            //add Edge
+            delete this.storage[i].edges[_.indexOf(this.storage[i].edges, this.storage[j].value)];
+            delete this.storage[j].edges[_.indexOf(this.storage[j].edges, this.storage[i].value)];
+          }
+        }
+      }
+  }
+  
 };
 
 Graph.prototype.forEachNode = function(cb){
-
+  // iterate through nodes and apply cb function
+  // no return
+  for (var i = 0; i < this.storage.length; i++) {
+    console.log(this.storage[i].value);
+    cb(this.storage[i].value)
+  }
 };
 
 /*
